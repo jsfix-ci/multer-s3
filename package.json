@@ -1,5 +1,5 @@
 {
-  "name": "veritqas-s3-transform",
+  "name": "veritas-s3-transform",
   "version": "1.0.0",
   "description": "Streaming multer storage engine for AWS S3",
   "main": "index.js",
