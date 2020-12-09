@@ -93,10 +93,8 @@ function S3Storage(opts) {
         case "string":
             this.getBucket = staticValue(opts.bucket);
             break;
-        case "undefined":
-            throw new Error("bucket is required");
-        default:
-            throw new TypeError("Expected opts.bucket to be undefined, string or function");
+        case "undefined": throw new Error("bucket is required");
+        default: throw new TypeError("Expected opts.bucket to be undefined, string or function");
     }
     switch (typeof opts.key) {
         case "function":
@@ -118,8 +116,7 @@ function S3Storage(opts) {
         case "undefined":
             this.getAcl = defaultAcl;
             break;
-        default:
-            throw new TypeError("Expected opts.acl to be undefined, string or function");
+        default: throw new TypeError("Expected opts.acl to be undefined, string or function");
     }
     switch (typeof opts.contentType) {
         case "function":

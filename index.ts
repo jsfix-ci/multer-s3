@@ -1,4 +1,6 @@
 import {PassThrough} from 'stream';
+import * as AWS from 'aws-sdk';
+import {S3Storage} from 'aws-sdk/clients/ec2';
 
 let {randomBytes} = require("crypto");
 let stream = require("stream");
@@ -7,7 +9,7 @@ let isSvg = require("is-svg");
 let parallel = require("run-parallel");
 
 function staticValue(value: string|boolean|null) {
-  return function (req: Request, file: any, cb: (arg0: null, value: string | boolean | null) => void) {
+  return function (req: Express.Request, file: Express.Multer.File, cb: (error: null, value: string | boolean | null) => void) {
     cb(null, value);
   };
 }
@@ -24,14 +26,14 @@ let defaultSSEKMS = staticValue(null);
 let defaultShouldTransform = staticValue(false);
 let defaultTransforms: never[] = [];
 
-function defaultKey(req: Request, file: any, cb: ((arg0: any, arg1: any) => void)) {
+function defaultKey(req: Express.Request, file: Express.Multer.File, cb: ((error: any, arg1: any) => void)) {
   randomBytes(16, function (err: any, raw: { toString: (arg0: string) => any; }) {
     cb(err, err ? undefined : raw.toString("hex"));
   });
 }
 
-function autoContentType(req: Request, file: any, cb: (arg0: null, mime: string, outStream: PassThrough) => void) {
-  file.stream.once("data", function (firstChunk: any) {
+function autoContentType(req: Express.Request, file: Express.Multer.File, cb: (error: null, mime?: string, stream?: PassThrough) => void): void {
+  file.stream.once("data", function (firstChunk: any): void {
     const type = fileType(firstChunk);
     let mime;
 
@@ -52,7 +54,7 @@ function autoContentType(req: Request, file: any, cb: (arg0: null, mime: string,
   });
 }
 
-function collect(storage: any, req: Request, file: any, cb: any) {
+function collect(storage: any, req: Express.Request, file: Express.Multer.File, cb: any) {
   parallel(
     [
       storage.getBucket.bind(storage, req, file),
@@ -102,18 +104,10 @@ function S3Storage(this: any, opts: any) {
   }
 
   switch (typeof opts.bucket) {
-    case "function":
-      this.getBucket = opts.bucket;
-      break;
-    case "string":
-      this.getBucket = staticValue(opts.bucket);
-      break;
-    case "undefined":
-      throw new Error("bucket is required");
-    default:
-      throw new TypeError(
-        "Expected opts.bucket to be undefined, string or function"
-      );
+    case "function": this.getBucket = opts.bucket; break;
+    case "string": this.getBucket = staticValue(opts.bucket); break;
+    case "undefined": throw new Error("bucket is required");
+    default: throw new TypeError("Expected opts.bucket to be undefined, string or function");
   }
 
   switch (typeof opts.key) {
@@ -128,19 +122,10 @@ function S3Storage(this: any, opts: any) {
   }
 
   switch (typeof opts.acl) {
-    case "function":
-      this.getAcl = opts.acl;
-      break;
-    case "string":
-      this.getAcl = staticValue(opts.acl);
-      break;
-    case "undefined":
-      this.getAcl = defaultAcl;
-      break;
-    default:
-      throw new TypeError(
-        "Expected opts.acl to be undefined, string or function"
-      );
+    case "function": this.getAcl = opts.acl; break;
+    case "string": this.getAcl = staticValue(opts.acl); break;
+    case "undefined": this.getAcl = defaultAcl;  break;
+    default: throw new TypeError("Expected opts.acl to be undefined, string or function");
   }
 
   switch (typeof opts.contentType) {
@@ -303,7 +288,7 @@ function S3Storage(this: any, opts: any) {
   }
 }
 
-S3Storage.prototype._handleFile = function (req: Request, file: any, cb: (arg0: any) => any) {
+S3Storage.prototype._handleFile = function (req: Express.Request, file: Express.Multer.File, cb: (error: any) => any) {
   collect(this, req, file, function (err: any, opts: { shouldTransform: any; }) {
     if (err) return cb(err);
     // @ts-ignore
@@ -317,8 +302,8 @@ S3Storage.prototype._handleFile = function (req: Request, file: any, cb: (arg0: 
   });
 };
 
-S3Storage.prototype.directUpload = function (opts: { bucket: any; key: any; acl: any; cacheControl: any; contentType: any; metadata: any; storageClass: any; serverSideEncryption: any; sseKmsKeyId: any; replacementStream: any; contentDisposition: any; }, file: { stream: any; }, cb: (arg0: null, arg1?: { size: number; bucket: any; key: any; acl: any; contentType: any; contentDisposition: any; storageClass: any; serverSideEncryption: any; metadata: any; location: any; etag: any; versionId: any; } | undefined) => void) {
-  let currentSize = 0;
+S3Storage.prototype.directUpload = function (opts: { bucket?: any; key?: any; acl?: any; cacheControl?: any; contentType?: any; metadata?: any; storageClass?: any; serverSideEncryption?: any; sseKmsKeyId?: any; replacementStream?: any; contentDisposition?: any; shouldTransform?: boolean }, file: Express.Multer.File, cb: (error: null, arg1?: { size: number; bucket: any; key: any; acl: any; contentType: any; contentDisposition: any; storageClass: any; serverSideEncryption: any; metadata: any; location: any; etag: any; versionId: any; } | undefined) => void) {
+  let currentSize: number = 0;
 
   let params: {
     ContentType: any;
@@ -375,7 +360,7 @@ S3Storage.prototype.directUpload = function (opts: { bucket: any; key: any; acl:
   });
 };
 
-S3Storage.prototype.transformUpload = function (opts: { bucket: any; acl: any; cacheControl: any; contentType: any; metadata: any; storageClass: any; serverSideEncryption: any; sseKmsKeyId: any; replacementStream: any; contentDisposition: any; }, req: any, file: { stream: any; }, cb: (arg0: null, arg1?: { transforms: { id: any; size: number; bucket: any; key: any; acl: any; contentType: any; contentDisposition: any; storageClass: any; serverSideEncryption: any; metadata: any; location: any; etag: any; }[]; } | undefined) => any) {
+S3Storage.prototype.transformUpload = function (opts: { bucket: any; acl: any; cacheControl: any; contentType: any; metadata: any; storageClass: any; serverSideEncryption: any; sseKmsKeyId: any; replacementStream: any; contentDisposition: any; }, req: Express.Request, file: Express.Multer.File, cb: (arg0: null, arg1?: { transforms: { id: any; size: number; bucket: any; key: any; acl: any; contentType: any; contentDisposition: any; storageClass: any; serverSideEncryption: any; metadata: any; location: any; etag: any; }[]; } | undefined) => any) {
   let storage = this;
   let results: { id: any; size: number; bucket: any; key: any; acl: any; contentType: any; contentDisposition: any; storageClass: any; serverSideEncryption: any; metadata: any; location: any; etag: any; }[] = [];
   parallel(
@@ -439,7 +424,18 @@ S3Storage.prototype._removeFile = function (req: any, file: { bucket: any; key: 
   this.s3.deleteObject({ Bucket: file.bucket, Key: file.key }, cb);
 };
 
-module.exports = function (opts: any) {
+declare interface Options {
+  s3: AWS.S3;
+  bucket: ((req: Express.Request, file: Express.Multer.File, callback: (error: any, bucket?: string) => void) => void) | string;
+  key?(req: Express.Request, file: Express.Multer.File, callback: (error: any, key?: string) => void): void;
+  acl?: ((req: Express.Request, file: Express.Multer.File, callback: (error: any, acl?: string) => void) => void) | string;
+  contentType?(req: Express.Request, file: Express.Multer.File, callback: (error: any, mime?: string, stream?: NodeJS.ReadableStream) => void): void;
+  metadata?(req: Express.Request, file: Express.Multer.File, callback: (error: any, metadata?: any) => void): void;
+  cacheControl?: ((req: Express.Request, file: Express.Multer.File, callback: (error: any, cacheControl?: string) => void) => void) | string;
+  serverSideEncryption?: ((req: Express.Request, file: Express.Multer.File, callback: (error: any, serverSideEncryption?: string) => void) => void) | string;
+}
+
+module.exports = function (opts: Options) {
   // @ts-ignore
   return new S3Storage(opts);
 };

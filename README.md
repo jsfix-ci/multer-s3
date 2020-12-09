@@ -9,7 +9,7 @@ This project is mostly an integration piece for existing code samples from Multe
 ## Installation
 
 ```sh
-npm install --save veritas-s3-transform
+npm i veritas-s3-transform --save
 ```
 
 ## Usage
