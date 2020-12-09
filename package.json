@@ -1,6 +1,6 @@
 {
-  "name": "multer-s3-transform",
-  "version": "2.10.3",
+  "name": "veritqas-s3-transform",
+  "version": "1.0.0",
   "description": "Streaming multer storage engine for AWS S3",
   "main": "index.js",
   "scripts": {
@@ -8,33 +8,146 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tehkaiyu/multer-s3.git"
+    "url": "git+https://github.com/AssetVal/multer-s3.git"
   },
   "keywords": [
     "multer",
     "s3",
     "amazon",
+    "sharp",
     "aws"
   ],
-  "author": "badunk",
+  "author": "Antonio Bourassa (Abourassa@assetval.com)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/badunk/multer-s3/issues"
+    "url": "https://github.com/AssetVal/multer-s3/issues"
   },
-  "homepage": "https://github.com/tehkaiyu/multer-s3#readme",
+  "homepage": "https://github.com/AssetVal/multer-s3#readme",
   "dependencies": {
     "file-type": "^3.3.0",
     "is-svg": "^2.1.0",
     "run-parallel": "^1.1.6"
   },
   "devDependencies": {
-    "aws-sdk": "^2.2.32",
+    "@getify/eslint-plugin-proper-arrows": "^10.0.0",
+    "@getify/eslint-plugin-proper-ternary": "^3.0.1",
+    "@types/node": "^14.14.11",
+    "aws-sdk": "^2.806.0",
     "concat-stream": "^1.5.1",
+    "eslint": "^7.15.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-import-resolver-node": "^0.3.4",
+    "eslint-plugin-import": "2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-security": "^1.4.0",
     "express": "^4.13.1",
     "form-data": "^1.0.0-rc3",
-    "mocha": "^2.2.5",
+    "mocha": "^8.2.1",
     "multer": "^1.1.0",
     "on-finished": "^2.3.0",
     "xtend": "^4.0.1"
+  },
+  "eslintConfig": {
+    "plugins": [
+      "node",
+      "security",
+      "@getify/proper-ternary"
+    ],
+    "extends": [
+      "airbnb-base",
+      "plugin:node/recommended",
+      "plugin:security/recommended",
+      "plugin:import/errors",
+      "plugin:import/warnings",
+      "plugin:@getify/proper-ternary/getify-says"
+    ],
+    "env": {
+      "shared-node-browser": true,
+      "es6": true,
+      "mongo": true,
+      "jquery": true
+    },
+    "rules": {
+      "node/no-unsupported-features/es-syntax": [
+        "error",
+        {
+          "ignores": [
+            "dynamicImport",
+            "modules"
+          ]
+        }
+      ],
+      "arrow-parens": [
+        "error",
+        "as-needed",
+        {
+          "requireForBlockBody": true
+        }
+      ],
+      "one-var": "off",
+      "class-methods-use-this": "off",
+      "one-var-declaration-per-line": "off",
+      "consistent-return": "off",
+      "func-names": "off",
+      "max-len": "off",
+      "no-unused-expressions": "off",
+      "no-console": "off",
+      "no-shadow": [
+        "error",
+        {
+          "hoist": "never",
+          "allow": [
+            "done",
+            "resolve",
+            "err",
+            "error",
+            "cb",
+            "User",
+            "user",
+            "issue"
+          ]
+        }
+      ],
+      "no-param-reassign": "off",
+      "no-prototype-builtins": "off",
+      "no-new": "off",
+      "newline-per-chained-call": "off",
+      "no-lonely-if": "error",
+      "no-new-object": "error",
+      "no-plusplus": "off",
+      "no-bitwise": "off",
+      "object-curly-newline": [
+        "error",
+        {
+          "multiline": true,
+          "consistent": true
+        }
+      ],
+      "no-underscore-dangle": "off",
+      "object-curly-spacing": [
+        "error",
+        "never"
+      ],
+      "object-shorthand": [
+        "error",
+        "consistent"
+      ],
+      "prefer-destructuring": "off",
+      "space-before-blocks": "off",
+      "space-before-function-paren": [
+        "error",
+        "never"
+      ],
+      "prefer-rest-params": "off",
+      "no-undef": "off",
+      "lines-between-class-members": "off",
+      "camelcase": "off",
+      "import/newline-after-import": "off",
+      "import/no-named-as-default": "off",
+      "import/extensions": "off",
+      "import/no-unresolved": "off",
+      "security/detect-object-injection": "off",
+      "@getify/proper-ternary/where": "off"
+    }
   }
 }
