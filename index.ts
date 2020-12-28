@@ -3,9 +3,9 @@ import * as AWS from 'aws-sdk';
 import {S3Storage} from 'aws-sdk/clients/ec2';
 
 let {randomBytes} = require("crypto");
-let stream = require("stream");
-let fileType = require("file-type");
-let isSvg = require("is-svg");
+const stream = require("stream");
+const fileType = require("file-type");
+const isSvg = require("is-svg");
 let parallel = require("run-parallel");
 
 function staticValue(value: string|boolean|null) {
@@ -33,8 +33,8 @@ function defaultKey(req: Express.Request, file: Express.Multer.File, cb: ((error
 }
 
 function autoContentType(req: Express.Request, file: Express.Multer.File, cb: (error: null, mime?: string, stream?: PassThrough) => void): void {
-  file.stream.once("data", function (firstChunk: any): void {
-    const type = fileType(firstChunk);
+  file.stream.once("data", async function (firstChunk: any): Promise<void> {
+    const type = await fileType.fromBuffer(firstChunk);
     let mime;
 
     if (type) {
