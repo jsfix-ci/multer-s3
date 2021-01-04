@@ -1,15 +1,13 @@
 import {PassThrough} from 'stream';
 import * as AWS from 'aws-sdk';
-import {S3Storage} from 'aws-sdk/clients/ec2';
-
-let {randomBytes} = require("crypto");
-const stream = require("stream");
-const fileType = require("file-type");
-const isSvg = require("is-svg");
-let parallel = require("run-parallel");
+import {randomBytes} from 'crypto';
+import stream from 'stream';
+import fileType from 'file-type';
+import isSvg from 'is-svg';
+import parallel from 'run-parallel';
 
 function staticValue(value: string|boolean|null) {
-  return function (req: Express.Request, file: Express.Multer.File, cb: (error: null, value: string | boolean | null) => void) {
+  return function(req: Express.Request, file: Express.Multer.File, cb: (error: null, value: string | boolean | null) => void): void {
     cb(null, value);
   };
 }
@@ -27,7 +25,7 @@ let defaultShouldTransform = staticValue(false);
 let defaultTransforms: never[] = [];
 
 function defaultKey(req: Express.Request, file: Express.Multer.File, cb: ((error: any, arg1: any) => void)) {
-  randomBytes(16, function (err: any, raw: { toString: (arg0: string) => any; }) {
+  randomBytes(16, function(err: any, raw: Buffer) {
     cb(err, err ? undefined : raw.toString("hex"));
   });
 }

@@ -1,6 +1,6 @@
 {
   "name": "veritas-s3-transform",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Streaming multer storage engine for AWS S3",
   "main": "index.js",
   "scripts": {
@@ -34,6 +34,7 @@
     "@types/multer": "^1.4.5",
     "@types/multer-s3": "^2.7.9",
     "@types/node": "^14.14.19",
+    "@types/run-parallel": "^1.1.0",
     "aws-sdk": "^2.820.0",
     "concat-stream": "^2.0.0",
     "eslint": "^7.17.0",
@@ -99,17 +100,7 @@
       "no-shadow": [
         "error",
         {
-          "hoist": "never",
-          "allow": [
-            "done",
-            "resolve",
-            "err",
-            "error",
-            "cb",
-            "User",
-            "user",
-            "issue"
-          ]
+          "hoist": "never"
         }
       ],
       "no-param-reassign": "off",

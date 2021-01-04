@@ -1,10 +1,13 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-let { randomBytes } = require("crypto");
-let stream = require("stream");
-let fileType = require("file-type");
-let isSvg = require("is-svg");
-let parallel = require("run-parallel");
+const crypto_1 = require("crypto");
+const stream_1 = __importDefault(require("stream"));
+const file_type_1 = __importDefault(require("file-type"));
+const is_svg_1 = __importDefault(require("is-svg"));
+const run_parallel_1 = __importDefault(require("run-parallel"));
 function staticValue(value) {
     return function (req, file, cb) {
         cb(null, value);
@@ -21,31 +24,31 @@ let defaultSSEKMS = staticValue(null);
 let defaultShouldTransform = staticValue(false);
 let defaultTransforms = [];
 function defaultKey(req, file, cb) {
-    randomBytes(16, function (err, raw) {
+    crypto_1.randomBytes(16, function (err, raw) {
         cb(err, err ? undefined : raw.toString("hex"));
     });
 }
 function autoContentType(req, file, cb) {
-    file.stream.once("data", function (firstChunk) {
-        const type = fileType(firstChunk);
+    file.stream.once("data", async function (firstChunk) {
+        const type = await file_type_1.default.fromBuffer(firstChunk);
         let mime;
         if (type) {
             mime = type.mime;
         }
-        else if (isSvg(firstChunk)) {
+        else if (is_svg_1.default(firstChunk)) {
             mime = "image/svg+xml";
         }
         else {
             mime = "application/octet-stream";
         }
-        let outStream = new stream.PassThrough();
+        let outStream = new stream_1.default.PassThrough();
         outStream.write(firstChunk);
         file.stream.pipe(outStream);
         cb(null, mime, outStream);
     });
 }
 function collect(storage, req, file, cb) {
-    parallel([
+    run_parallel_1.default([
         storage.getBucket.bind(storage, req, file),
         storage.getKey.bind(storage, req, file),
         storage.getAcl.bind(storage, req, file),
@@ -308,7 +311,7 @@ S3Storage.prototype.directUpload = function (opts, file, cb) {
 S3Storage.prototype.transformUpload = function (opts, req, file, cb) {
     let storage = this;
     let results = [];
-    parallel(storage.getTransforms.map(function (transform) {
+    run_parallel_1.default(storage.getTransforms.map(function (transform) {
         return transform.key.bind(storage, req, file);
     }), function (err, keys) {
         if (err)
