@@ -181,6 +181,46 @@ function S3Storage(this: any, opts: any) {
         "Expected opts.shouldTransform to be undefined, boolean or function"
       );
   }
+  switch (typeof opts.transforms) {
+    case "object":
+      this.getTransforms = opts.transforms;
+      break;
+    case "undefined":
+      this.getTransforms = defaultTransforms;
+      break;
+    default:
+      throw new TypeError("Expected opts.transforms to be undefined or object");
+  }
+
+  this.getTransforms.map(function (transform: { key: string | boolean | null; transform: any; }, i: any) {
+    switch (typeof transform.key) {
+      case "function":
+        break;
+      case "string":
+        // @ts-ignore
+        transform.key = staticValue(transform.key);
+        break;
+      case "undefined":
+        // @ts-ignore
+        transform.key = defaultKey();
+        break;
+      default:
+        throw new TypeError(
+          "Expected opts.transform[].key to be unedefined, string or function"
+        );
+    }
+
+    switch (typeof transform.transform) {
+      case "function":
+        break;
+      default:
+        throw new TypeError(
+          "Expected opts.transform[].transform to be function"
+        );
+    }
+    return transform;
+  });
+
 
   switch (typeof opts.contentDisposition) {
     case "function":
@@ -245,8 +285,6 @@ function S3Storage(this: any, opts: any) {
         "Expected opts.sseKmsKeyId to be undefined, string, or function"
       );
   }
-
-  this.transforms = opts.transforms
 }
 
 S3Storage.prototype._handleFile = function (req: Express.Request, file: Express.Multer.File, cb: (error: any) => any) {
