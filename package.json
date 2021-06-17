@@ -1,14 +1,14 @@
 {
-  "name": "veritas-s3-transform",
-  "version": "3.1.1",
-  "description": "Streaming multer storage engine for AWS S3",
+  "name": "tycrek-s3-transform",
+  "version": "3.2.0",
+  "description": "Streaming multer storage engine for AWS S3, with 2021 security updates",
   "main": "index.js",
   "scripts": {
     "test": "mocha test/basic.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AssetVal/multer-s3.git"
+    "url": "git+https://github.com/tycrek/multer-s3.git"
   },
   "keywords": [
     "multer",
@@ -17,12 +17,12 @@
     "sharp",
     "aws"
   ],
-  "author": "Antonio Bourassa (Abourassa@assetval.com)",
+  "author": "tycrek <t@tycrek.com> (https://tycrek.com)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/AssetVal/multer-s3/issues"
+    "url": "https://github.com/tycrek/multer-s3/issues"
   },
-  "homepage": "https://github.com/AssetVal/multer-s3#readme",
+  "homepage": "https://github.com/tycrek/multer-s3#readme",
   "dependencies": {
     "file-type": "^16.1.0",
     "is-svg": "^4.2.2",
