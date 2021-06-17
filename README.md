@@ -1,4 +1,4 @@
-# Veritas S3 Transform
+# Multer S3 Transform
 
 > This is a fork of [Multer S3](https://github.com/badunk/multer-s3), kept up to date, with the added [Transform](https://github.com/tehkaiyu/multer-s3#transforming-files-before-upload) property.
 
@@ -9,7 +9,7 @@ This project is mostly an integration piece for existing code samples from Multe
 ## Installation
 
 ```sh
-npm i veritas-s3-transform --save
+npm i tycrek-s3-transform
 ```
 
 ## Usage
@@ -18,7 +18,7 @@ npm i veritas-s3-transform --save
 var aws = require('aws-sdk')
 var express = require('express')
 var multer = require('multer')
-var multerS3 = require('veritas-s3-transform')
+var multerS3 = require('tycrek-s3-transform')
 
 var app = express()
 var s3 = new aws.S3({ /* ... */ })
