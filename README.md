@@ -1,5 +1,13 @@
 # Multer S3 Transform
 
+## Note on tycrek's fork
+
+My fork is a fork of [AssetVal/multer-s3](https://github.com/AssetVal/multer-s3) which is a fork of [kyh/multer-s3](https://github.com/kyh/multer-s3) which is a fork of [gmenih341/multer-s3](https://github.com/gmenih341/multer-s3) which is a fork of [badunk/multer-s3](https://github.com/badunk/multer-s3). With my fork, I aim to centralize changes from all upstreams (when possible) and keep dependencies up-to-date. I don't know all the major changes between each fork, but the most significant one is [@kyh](https://github.com/kyh) adding [Transform](https://github.com/tehkaiyu/multer-s3#transforming-files-before-upload).
+
+I have published this repo on [npm](https://www.npmjs.com/package/tycrek-s3-transform). It can be used in place of any of the aformentioned forks.
+
+---
+
 > This is a fork of [Multer S3](https://github.com/badunk/multer-s3), kept up to date, with the added [Transform](https://github.com/tehkaiyu/multer-s3#transforming-files-before-upload) property.
 
 Streaming multer storage engine for AWS S3.
