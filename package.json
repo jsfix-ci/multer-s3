@@ -1,7 +1,7 @@
 {
   "name": "tycrek-s3-transform",
-  "version": "3.2.0",
-  "description": "Streaming multer storage engine for AWS S3, with 2021 security updates",
+  "version": "3.3.0",
+  "description": "Streaming Multer storage engine for AWS S3, with 2021 security updates & Transform",
   "main": "index.js",
   "scripts": {
     "test": "mocha test/basic.js"
@@ -18,6 +18,12 @@
     "aws"
   ],
   "author": "tycrek <t@tycrek.com> (https://tycrek.com)",
+  "contributors": [
+    "Duncan Wong (http://www.linkedin.com/in/duncanwong1)",
+    "Gregor Menih <gregor@menih.si> (http://menih.si/)",
+    "Kaiyu Hsu <im.kaiyu@gmail.com> (https://kyh.io/)",
+    "Antonio Bourassa <abourassa@assetval.com> (https://www.assetval.com/)"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/tycrek/multer-s3/issues"
