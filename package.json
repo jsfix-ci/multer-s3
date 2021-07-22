@@ -1,6 +1,6 @@
 {
   "name": "tycrek-s3-transform",
-  "version": "3.3.0",
+  "version": "3.3.1-0",
   "description": "Streaming Multer storage engine for AWS S3, with 2021 security updates & Transform",
   "main": "index.js",
   "scripts": {
