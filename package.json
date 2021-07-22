@@ -17,8 +17,9 @@
     "sharp",
     "aws"
   ],
-  "author": "tycrek <t@tycrek.com> (https://tycrek.com)",
+  "__a__ut__hor": "tycrek <t@tycrek.com> (https://tycrek.com)",
   "contributors": [
+    "tycrek <t@tycrek.com> (https://tycrek.com)",
     "Duncan Wong (http://www.linkedin.com/in/duncanwong1)",
     "Gregor Menih <gregor@menih.si> (http://menih.si/)",
     "Kaiyu Hsu <im.kaiyu@gmail.com> (https://kyh.io/)",
