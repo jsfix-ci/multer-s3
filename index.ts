@@ -32,7 +32,7 @@ function defaultKey(req: Express.Request, file: Express.Multer.File, cb: ((error
 
 function autoContentType(req: Express.Request, file: Express.Multer.File, cb: (error: null, mime?: string, stream?: PassThrough) => void): void {
   file.stream.once("data", async function (firstChunk: any): Promise<void> {
-    const type = await fileType.fromBuffer(firstChunk);
+    const type = await fileType.fileTypeFromBuffer(firstChunk);
     let mime;
 
     if (type) {
